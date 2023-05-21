@@ -1,0 +1,5 @@
+name,textureName
+IronSpring,../assets/junk/spring.png
+AluminumCan,../assets/junk/can.png
+ZinkWire,../assets/junk/wire.png
+dirtyWater,../assets/junk/dirtyWater.png
