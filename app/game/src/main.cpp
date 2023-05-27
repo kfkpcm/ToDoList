@@ -16,9 +16,15 @@ int main(void)
     Rectangle textBox = { 10, 100, 600, 50 };
     bool mouseOnText = false;
 
+    // Load textures
+    Texture2D logo = LoadTexture("../Pictures/logo.png");
+    Image Iicon = LoadImage("../Pictures/notes.png");
+    Texture Ticon = LoadTextureFromImage(Iicon);
+
+   SetWindowIcon(Iicon);
+
     while (!WindowShouldClose())
     {
-
         switch (currentScreen)
         {
         case LOGO:
@@ -26,8 +32,6 @@ int main(void)
             if (IsKeyPressed(KEY_ENTER))
             {
                 currentScreen = TITLE;
-                Image icon = LoadImage("Pictures\notes.png");
-                SetWindowIcon(icon);
             }
         } break;
         case TITLE:
@@ -37,8 +41,11 @@ int main(void)
             {
                 currentScreen = INFO;
             }
-            Image icon = LoadImage("Pictures\notes.png");
-            SetWindowIcon(icon);
+
+
+
+            //how to draq da texture for dda images ;)
+            DrawTexture(Ticon, 0, 0, WHITE);
             if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
             else mouseOnText = false;
             if (mouseOnText)
@@ -75,8 +82,6 @@ int main(void)
             {
                 currentScreen = TITLE;
             }
-            Image icon = LoadImage("Pictures\notes.png");
-            SetWindowIcon(icon);
         } break;
         default: break;
         }
@@ -88,7 +93,7 @@ int main(void)
         {
         case LOGO:
         {
-            Image logo = LoadImage("Pictures\logo.png");
+            DrawTexture(logo, 0, 0, WHITE);
 
             DrawText("TODO", 430, 50, 40, PURPLE);
             DrawText("The app to finish tasks: quick, easy, productive.", 150, 325, 30, BLACK);
