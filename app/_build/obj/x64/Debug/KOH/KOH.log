@@ -1,4 +1,3 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(534,5): warning MSB8028: The intermediate directory (obj\x64\Debug\KOH\) contains files shared from another project (KOH.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (obj\x64\Debug\KOH\) contains files shared from another project (KOH.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.cpp
-C:\Users\Lenovo\Desktop\ToDoList\app\game\src\main.cpp(155,34): warning C4390: ';': empty controlled statement found; is this the intent?
-  KOH.vcxproj -> C:\Users\Lenovo\Desktop\ToDoList\app\_bin\Debug\KOH.exe
+  KOH.vcxproj -> C:\Users\RailCargo\Downloads\ToDoList\app\_bin\Debug\KOH.exe
