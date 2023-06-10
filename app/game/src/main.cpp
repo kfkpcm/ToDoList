@@ -4,7 +4,7 @@
 #include <sstream>
 
 #define NUM_FRAMES  3 
-#define MAX_INPUT_CHARS 26
+#define MAX_INPUT_CHARS 25
 
 typedef enum GameScreen { LOGO = 0, TITLE, INFO } GameScreen;
 int main(void)
@@ -15,7 +15,7 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "To-Do List");
     GameScreen currentScreen = LOGO;
 
-    int del = 0;
+    
     int framesCounter = 0;
     SetTargetFPS(60);
     Vector2 mousePoint = { 0.0f, 0.0f };
@@ -23,24 +23,14 @@ int main(void)
     //info
     Texture2D button = LoadTexture("../Pictures/info.png");
     float frameHeight = (float)160;
-    Rectangle sourceRec = { 780, 466, (float)160, frameHeight };
-    Rectangle btnBounds = { 820, 466, (float)button.width, frameHeight };
-    //save
-    Texture2D button1 = LoadTexture("../Pictures/save.png");
-    float frameHeight1 = (float)160;
-    Rectangle sourceRec1 = { 785, 98, (float)160, frameHeight1 };
-    Rectangle btnBounds1 = { 820, 98, (float)button1.width, frameHeight1 };
-    //show
-    Texture2D button2 = LoadTexture("../Pictures/show.png");
-    float frameHeight2 = (float)160;
-    Rectangle sourceRec2 = { 785, 282, (float)160, frameHeight2 };
-    Rectangle btnBounds2 = { 820, 282, (float)button2.width, frameHeight2 };
-    
+    Rectangle sourceRec = { 785, 98, (float)160, frameHeight };
+    Rectangle btnBounds = { 820, 98, (float)button.width, frameHeight };
+
     int btnState = 0;               // Button state: 0-NORMAL, 1-MOUSE_HOVER, 2-PRESSED
     bool btnAction = false;         // Button action should be activated
 
     //textbox 1
-    char name[MAX_INPUT_CHARS + 1] = "\0";
+    char name[MAX_INPUT_CHARS +1 ] = "\0";
     int letterCount = 0;
     Rectangle textBox = { 10, 100, 600, 50 };
     //textbox 2
@@ -64,7 +54,7 @@ int main(void)
 
     // Load textures
     Texture2D logo = LoadTexture("../Pictures/logo1.png");
-    Texture2D star = LoadTexture("../Pictures/star1.png");
+    
     Image Iicon = LoadImage("../Pictures/checkmark.png");
     Texture Ticon = LoadTextureFromImage(Iicon);
     SetWindowIcon(Iicon);
@@ -82,6 +72,7 @@ int main(void)
         } break;
         case TITLE:
         {
+            
             //BUTTONS 
             mousePoint = GetMousePosition();
             btnAction = false;
@@ -98,40 +89,6 @@ int main(void)
             else btnState = 0;
             sourceRec.y = btnState * frameHeight;
 
-            mousePoint = GetMousePosition();
-            btnAction = false;
-            if (CheckCollisionPointRec(mousePoint, btnBounds1))
-            {
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-                {
-                    btnState = 2;
-                }
-                else btnState = 1;
-                if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
-            }
-            else btnState = 0;
-            sourceRec1.y = btnState * frameHeight1;
-
-            mousePoint = GetMousePosition();
-            btnAction = false;
-            if (CheckCollisionPointRec(mousePoint, btnBounds2))
-            {
-                
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-                {
-                    btnState = 2;
-
-                    
-                }
-                else
-                btnState = 1;
-               
-                
-                if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
-            }
-            else btnState = 0;
-            framesCounter++;
-            sourceRec2.y = btnState * frameHeight2;
 
             //textbox 1
             if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
@@ -192,6 +149,7 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
+
                 int key = GetCharPressed();
                 while (key > 0)
                 {
@@ -255,7 +213,7 @@ int main(void)
                     }
                     key = GetCharPressed();
                 }
-                if (IsKeyPressed(KEY_BACKSPACE))
+                if (IsKeyPressed(KEY_BACKSPACE) || IsKeyDown(KEY_BACKSPACE))
                 {
                     letterCount4--;
                     if (letterCount4 < 0) letterCount4 = 0;
@@ -291,6 +249,8 @@ int main(void)
         } break;
         case TITLE:
         {
+            
+
             //textbox 1
             DrawText("Your tasks are the following:", 10, 20, 50, PURPLE);
             DrawRectangleRec(textBox, LIGHTGRAY);
@@ -328,42 +288,31 @@ int main(void)
             //random
             DrawRectangle(800, -1, 200, 650, PURPLE);
             DrawRectangle(820, 24, 160, 50, WHITE);
-            DrawRectangle(820, 98, 160, 160, WHITE);
-            DrawRectangle(820, 282, 160, 160, WHITE);
-            DrawRectangle(820, 466, 160, 160, WHITE);
-            DrawText("Save", 855, 150, 40, BLACK);
-            DrawText("Show", 855, 300, 40, BLACK);
-            DrawText("previous", 825, 350, 35, BLACK);
             DrawText("Help:", 850, 30, 40, BLACK);
-
-            //save, show, info
+            //button
             DrawTextureRec(button, sourceRec, (Vector2{ btnBounds.x, btnBounds.y }), WHITE);
-            DrawTextureRec(button1, sourceRec1, (Vector2{ btnBounds1.x, btnBounds1.y }), WHITE);
-            DrawTextureRec(button2, sourceRec2, (Vector2{ btnBounds2.x, btnBounds2.y }), WHITE);
-
         } break;
 
         case INFO:
         {
             DrawRectangle(0, -1, 200, 650, PURPLE);
-            DrawRectangle(25, 50, 150, 150, WHITE);
-            DrawRectangle(25, 250, 150, 150, WHITE);
-            DrawRectangle(25, 450, 150, 150, WHITE);
-            DrawText("SAVE", 50, 105, 40, BLACK);
-            DrawText("SHOW", 50, 280, 40, BLACK);
-            DrawText("PREVIOUS", 27, 330, 28, BLACK);
-            DrawText("INFO", 50, 505, 40, BLACK);
-            DrawText("This function saves", 215, 75, 40, BLACK);
-            DrawText("your tasks.", 215, 135, 40, BLACK);
-            DrawText("This function shows", 215, 275, 40, BLACK);
-            DrawText("your last saved tasks.", 215, 335, 40, BLACK);
-            DrawText("This function shows", 215, 475, 40, BLACK);
-            DrawText("the information menu.", 215, 535, 40, BLACK);
+            DrawRectangle(25, 50, 150, 150, WHITE); 
+            DrawText("INFO", 50, 105, 40, BLACK);
+            DrawText("This function shows", 215, 75, 40, BLACK);
+            DrawText("the information menu.", 215, 135, 40, BLACK);
+            
+            DrawLine(200, 250, 700, 250, BLACK);
+
+            DrawText("This app is designed ", 215, 300, 40, BLACK);
+            DrawText("to help organize ", 215, 380, 40, BLACK);
+            DrawText("your work. Using c++", 215, 460, 40, BLACK);
+            DrawText("we created TODO.", 215, 540, 40, BLACK);
+            
             DrawLine(700, 0, 700, 650, BLACK);
-            DrawText("This app is", 715, 60, 40, BLACK);
-            DrawText("designed to", 715, 120, 40, BLACK);
-            DrawText("help organize", 715, 180, 40, BLACK);
-            DrawText("your work.", 715, 240, 40, BLACK);
+            DrawText("Creators:", 750, 40, 40, BLACK);
+            DrawText("Daniel Uzunov", 710, 120, 40, BLACK);
+            DrawText("Georgi Dinev", 710, 180, 40, BLACK);
+            DrawText("Doriana Petkova", 710, 240, 35, BLACK);
             DrawText("(press enter to go back)", 715, 600, 20, LIGHTGRAY);
         } break;
         default: break;
@@ -371,8 +320,7 @@ int main(void)
         EndDrawing();
     }
     UnloadTexture(button);
-    UnloadTexture(button1);
-    UnloadTexture(button2);
+    
     return 0;
     CloseWindow();
 }
