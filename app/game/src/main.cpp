@@ -3,21 +3,20 @@
 #include <iostream>
 #include <sstream>
 
-#define NUM_FRAMES  3 
 #define MAX_INPUT_CHARS 25
 
 typedef enum GameScreen { LOGO = 0, TITLE, INFO } GameScreen;
 int main(void)
 {
+    // Initialization
     const int screenWidth = 1000;
     const int screenHeight = 650;
 
     InitWindow(screenWidth, screenHeight, "To-Do List");
     GameScreen currentScreen = LOGO;
 
-    
     int framesCounter = 0;
-    SetTargetFPS(60);
+    SetTargetFPS(60); // Set desired framerate (frames-per-second)
     Vector2 mousePoint = { 0.0f, 0.0f };
 
     //info
@@ -74,8 +73,10 @@ int main(void)
         {
             
             //BUTTONS 
+            // Update
             mousePoint = GetMousePosition();
             btnAction = false;
+            // Check button state
             if (CheckCollisionPointRec(mousePoint, btnBounds))
             {
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -87,6 +88,7 @@ int main(void)
                 if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
             }
             else btnState = 0;
+            // Calculate button frame rectangle to draw depending on button state
             sourceRec.y = btnState * frameHeight;
 
 
@@ -95,17 +97,19 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
-                
+                // Get char pressed (unicode character) on the queue
                 int key = GetCharPressed();
+                // Check if more characters have been pressed on the same frame
                 while (key > 0)
                 {
+                    // NOTE: Only allow keys in range [32..125]
                     if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS))
                     {
                         name[letterCount] = (char)key;
                         name[letterCount + 1] = '\0'; // Add null terminator at the end of the string.
                         letterCount++;
                     }
-                    key = GetCharPressed();
+                    key = GetCharPressed(); // Check next character in the queue
                 }
                 if (IsKeyPressed(KEY_BACKSPACE))
                 {
@@ -202,6 +206,7 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
+
                 int key = GetCharPressed();
                 while (key > 0)
                 {
@@ -319,11 +324,13 @@ int main(void)
         }
         EndDrawing();
     }
+    // De-Initialization
     UnloadTexture(button);
-    
     return 0;
     CloseWindow();
 }
+// Check if any key is pressed
+// NOTE: We limit keys check to keys between 32 (KEY_SPACE) and 126
 bool IsAnyKeyPressed()
 {
     bool keyPressed = false;
