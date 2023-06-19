@@ -3,7 +3,8 @@
 #include <iostream>
 #include <sstream>
 
-#define MAX_INPUT_CHARS 25
+#define NUM_FRAMES  3
+constexpr auto MAX_INPUT_CHARS = 25;
 
 typedef enum GameScreen { LOGO = 0, TITLE, INFO } GameScreen;
 int main(void)
@@ -71,7 +72,11 @@ int main(void)
         } break;
         case TITLE:
         {
-            
+            if (IsKeyPressed(KEY_DELETE))
+            {
+                currentScreen = LOGO;
+            }
+
             //BUTTONS 
             // Update
             mousePoint = GetMousePosition();
@@ -290,7 +295,7 @@ int main(void)
 
             
 
-            //random
+            //design
             DrawRectangle(800, -1, 200, 650, PURPLE);
             DrawRectangle(820, 24, 160, 50, WHITE);
             DrawText("Help:", 850, 30, 40, BLACK);
@@ -300,6 +305,7 @@ int main(void)
 
         case INFO:
         {
+            //explanation
             DrawRectangle(0, -1, 200, 650, PURPLE);
             DrawRectangle(25, 50, 150, 150, WHITE); 
             DrawText("INFO", 50, 105, 40, BLACK);
