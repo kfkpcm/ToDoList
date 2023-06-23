@@ -1,7 +1,6 @@
 #include "raylib.h"
-#include <stdlib.h>  
 #include <iostream>
-#include <sstream>
+#include <cstring>
 
 #define NUM_FRAMES  3
 constexpr auto MAX_INPUT_CHARS = 25;
@@ -28,33 +27,60 @@ int main(void)
 
     int btnState = 0;               // Button state: 0-NORMAL, 1-MOUSE_HOVER, 2-PRESSED
     bool btnAction = false;         // Button action should be activated
-
+    
     //textbox 1
-    char name[MAX_INPUT_CHARS +1 ] = "\0";
-    int letterCount = 0;
+    std::string name;
     Rectangle textBox = { 10, 100, 600, 50 };
     //textbox 2
-    char name1[MAX_INPUT_CHARS + 1] = "\0";
-    int letterCount1 = 0;
+    std::string name1;
     Rectangle textBox1 = { 10, 200, 600, 50 };
     //textbox 3
-    char name2[MAX_INPUT_CHARS + 1] = "\0";
-    int letterCount2 = 0;
+    std::string name2;
     Rectangle textBox2 = { 10, 300, 600, 50 };
     //textbox 4
-    char name3[MAX_INPUT_CHARS + 1] = "\0";
-    int letterCount3 = 0;
+    std::string name3;
     Rectangle textBox3 = { 10, 400, 600, 50 };
     //textbox 5
-    char name4[MAX_INPUT_CHARS + 1] = "\0";
-    int letterCount4 = 0;
+    std::string name4;
     Rectangle textBox4 = { 10, 500, 600, 50 };
 
     bool mouseOnText = false;
 
     // Load textures
     Texture2D logo = LoadTexture("../Pictures/logo1.png");
-    
+    Texture2D checkmark = LoadTexture("../Pictures/white.png");
+    Texture2D checkmark1 = LoadTexture("../Pictures/green.png");
+    Texture2D star1 = LoadTexture("../Pictures/starw.png");
+    Texture2D star2 = LoadTexture("../Pictures/stary.png");
+    Texture2D checkbig = LoadTexture("../Pictures/checkbig.png");
+    Texture2D starbig = LoadTexture("../Pictures/starybig.png");
+
+    //checkmark 1 + star 
+    Rectangle checkw = { 610, 95, 60, 60 };
+    Rectangle starw = { 700, 95, 60, 60 };
+    int star = 0;
+    int check = 0;
+    //checkmark 2 + star 
+    Rectangle checkw1 = { 610, 195, 60, 60 };
+    Rectangle starw1 = { 700, 195, 60, 60 };
+    int starc = 0;
+    int check1 = 0;
+    //checkmark 3 + star 
+    Rectangle checkw2 = { 610, 295, 60, 60 };
+    Rectangle starw2 = { 700, 295, 60, 60 };
+    int starcc = 0;
+    int check2 = 0;
+    //checkmark 4 + star 
+    Rectangle checkw3 = { 610, 395, 60, 60 };
+    Rectangle starw3 = { 700, 395, 60, 60 };
+    int star3 = 0;
+    int check3 = 0;
+    //checkmark 5 + star 
+    Rectangle checkw4 = { 610, 495, 60, 60 };
+    Rectangle starw4 = { 700, 495, 60, 60 };
+    int star4 = 0;
+    int check4 = 0;
+
     Image Iicon = LoadImage("../Pictures/checkmark.png");
     Texture Ticon = LoadTextureFromImage(Iicon);
     SetWindowIcon(Iicon);
@@ -66,18 +92,47 @@ int main(void)
         case LOGO:
         {
             if (IsKeyPressed(KEY_ENTER))
-            {
                 currentScreen = TITLE;
-            }
         } break;
         case TITLE:
         {
             if (IsKeyPressed(KEY_DELETE))
-            {
                 currentScreen = LOGO;
-            }
 
-            //BUTTONS 
+            //checkmarks
+            if (CheckCollisionPointRec(mousePoint, checkw))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    check = 1; 
+            if (CheckCollisionPointRec(mousePoint, checkw1))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    check1 = 1;
+            if (CheckCollisionPointRec(mousePoint, checkw2))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    check2 = 1;
+            if (CheckCollisionPointRec(mousePoint, checkw3))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    check3 = 1;
+            if (CheckCollisionPointRec(mousePoint, checkw4))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    check4 = 1;
+            //stars
+            if (CheckCollisionPointRec(mousePoint, starw))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    star = 1;
+            if (CheckCollisionPointRec(mousePoint, starw1))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    starc = 1;
+            if (CheckCollisionPointRec(mousePoint, starw2))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    starcc = 1;
+            if (CheckCollisionPointRec(mousePoint, starw3))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    star3 = 1;
+            if (CheckCollisionPointRec(mousePoint, starw4))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    star4 = 1;
+
+            //BUTTON 
             // Update
             mousePoint = GetMousePosition();
             btnAction = false;
@@ -96,7 +151,6 @@ int main(void)
             // Calculate button frame rectangle to draw depending on button state
             sourceRec.y = btnState * frameHeight;
 
-
             //textbox 1
             if (CheckCollisionPointRec(GetMousePosition(), textBox)) mouseOnText = true;
             else mouseOnText = false;
@@ -108,19 +162,15 @@ int main(void)
                 while (key > 0)
                 {
                     // NOTE: Only allow keys in range [32..125]
-                    if ((key >= 32) && (key <= 125) && (letterCount < MAX_INPUT_CHARS))
-                    {
-                        name[letterCount] = (char)key;
-                        name[letterCount + 1] = '\0'; // Add null terminator at the end of the string.
-                        letterCount++;
-                    }
+                    if ((key >= 32) && (key <= 125) )
+
+                        name += static_cast<char>(key);
                     key = GetCharPressed(); // Check next character in the queue
                 }
                 if (IsKeyPressed(KEY_BACKSPACE))
                 {
-                    letterCount--;
-                    if (letterCount < 0) letterCount = 0;
-                    name[letterCount] = '\0';
+                    if (!name.empty())
+                        name.pop_back();
                 }
             }
             else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
@@ -131,23 +181,17 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
-                
                 int key = GetCharPressed();
                 while (key > 0)
                 {
-                    if ((key >= 32) && (key <= 125) && (letterCount1 < MAX_INPUT_CHARS))
-                    {
-                        name1[letterCount1] = (char)key;
-                        name1[letterCount1 + 1] = '\0'; // Add null terminator at the end of the string.
-                        letterCount1++;
-                    }
+                    if ((key >= 32) && (key <= 125))
+                        name1 += static_cast<char>(key);
                     key = GetCharPressed();
                 }
                 if (IsKeyPressed(KEY_BACKSPACE))
                 {
-                    letterCount1--;
-                    if (letterCount1 < 0) letterCount1 = 0;
-                    name1[letterCount1] = '\0';
+                    if (!name1.empty())
+                        name1.pop_back();
                 }
             }
             else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
@@ -158,23 +202,17 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
-
                 int key = GetCharPressed();
                 while (key > 0)
                 {
-                    if ((key >= 32) && (key <= 125) && (letterCount2 < MAX_INPUT_CHARS))
-                    {
-                        name2[letterCount2] = (char)key;
-                        name2[letterCount2 + 1] = '\0'; // Add null terminator at the end of the string.
-                        letterCount2++;
-                    }
+                    if ((key >= 32) && (key <= 125))
+                        name2 += static_cast<char>(key);
                     key = GetCharPressed();
                 }
                 if (IsKeyPressed(KEY_BACKSPACE))
                 {
-                    letterCount2--;
-                    if (letterCount2 < 0) letterCount2 = 0;
-                    name2[letterCount2] = '\0';
+                    if (!name2.empty())
+                        name2.pop_back();
                 }
             }
             else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
@@ -188,19 +226,14 @@ int main(void)
                 int key = GetCharPressed();
                 while (key > 0)
                 {
-                    if ((key >= 32) && (key <= 125) && (letterCount3 < MAX_INPUT_CHARS))
-                    {
-                        name3[letterCount3] = (char)key;
-                        name3[letterCount3 + 1] = '\0'; // Add null terminator at the end of the string.
-                        letterCount3++;
-                    }
+                    if ((key >= 32) && (key <= 125))
+                        name3 += static_cast<char>(key);
                     key = GetCharPressed();
                 }
                 if (IsKeyPressed(KEY_BACKSPACE))
                 {
-                    letterCount3--;
-                    if (letterCount3 < 0) letterCount3 = 0;
-                    name3[letterCount3] = '\0';
+                    if (!name3.empty())
+                        name3.pop_back();
                 }
             }
             else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
@@ -211,36 +244,27 @@ int main(void)
             else mouseOnText = false;
             if (mouseOnText)
             {
-
                 int key = GetCharPressed();
                 while (key > 0)
                 {
-                    if ((key >= 32) && (key <= 125) && (letterCount4 < MAX_INPUT_CHARS))
-                    {
-                        name4[letterCount4] = (char)key;
-                        name4[letterCount4 + 1] = '\0'; // Add null terminator at the end of the string.
-                        letterCount4++;
-                    }
+                    if ((key >= 32) && (key <= 125))
+                        name4 += static_cast<char>(key);
                     key = GetCharPressed();
                 }
                 if (IsKeyPressed(KEY_BACKSPACE) || IsKeyDown(KEY_BACKSPACE))
                 {
-                    letterCount4--;
-                    if (letterCount4 < 0) letterCount4 = 0;
-                    name4[letterCount4] = '\0';
+                    if (!name4.empty())
+                        name4.pop_back();
                 }
             }
             else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
             if (mouseOnText) framesCounter++;
             else framesCounter = 0;
         } break;
-
         case INFO:
         {
             if (IsKeyPressed(KEY_ENTER))
-            {
                 currentScreen = TITLE;
-            }
         } break;
         default: break;
         }
@@ -259,41 +283,119 @@ int main(void)
         } break;
         case TITLE:
         {
-            
-
             //textbox 1
+            DrawTexture(checkmark, 610, 95, WHITE);
+            DrawTexture(star1, 700, 95, WHITE);
             DrawText("Your tasks are the following:", 10, 20, 50, PURPLE);
             DrawRectangleRec(textBox, LIGHTGRAY);
             DrawRectangleLines((int)10, (int)100, (int)600, (int)50, BLACK);
-            DrawText(name, (int)10, (int)100, 40, BLACK);
+            DrawText(name.c_str(), (int)10, (int)100, 40, BLACK);
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)textBox.x + 8 + MeasureText(name, 40), (int)textBox.y + 12, 40, BLACK);
+                DrawText("_", (int)textBox.x + 8 + MeasureText(name.c_str(), 40), (int)textBox.y + 12, 40, BLACK);
+            if (check == 1)
+            {
+                DrawTexture(checkmark1, 610, 95, WHITE);
+                name = "";
+                DrawTexture(star1, 700, 95, WHITE);
+                star = 0;
+            }
+            else
+            {
+                DrawTexture(checkmark, 610, 95, WHITE);
+                if (star == 1)
+                    DrawTexture(star2, 700, 95, RAYWHITE);
+            }
+            
+            check = 0;
+            
             //textbox 2
+            DrawTexture(checkmark, 610, 195, WHITE);
+            DrawTexture(star1, 700, 195, WHITE);
             DrawRectangleRec(textBox1, LIGHTGRAY);
             DrawRectangleLines((int)10, (int)200, (int)600, (int)50, BLACK);
-            DrawText(name1, (int)10, (int)200, 40, BLACK);
+            DrawText(name1.c_str(), (int)10, (int)200, 40, BLACK);
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)textBox1.x + 8 + MeasureText(name1, 40), (int)textBox1.y + 12, 40, BLACK);
+                DrawText("_", (int)textBox1.x + 8 + MeasureText(name1.c_str(), 40), (int)textBox1.y + 12, 40, BLACK);
+            if (check1 == 1)
+            {
+                DrawTexture(checkmark1, 610, 195, WHITE);
+                name1 = "";
+                DrawTexture(star1, 700, 195, WHITE);
+                starc = 0;
+            }
+            else
+            {
+                DrawTexture(checkmark, 610, 195, WHITE);
+                if (starc == 1)
+                    DrawTexture(star2, 700, 195, RAYWHITE);
+            }
+            check1 = 0;
             //textbox 3
+            DrawTexture(checkmark, 610, 295, WHITE);
+            DrawTexture(star1, 700, 295, WHITE);
             DrawRectangleRec(textBox2, LIGHTGRAY);
             DrawRectangleLines((int)10, (int)300, (int)600, (int)50, BLACK);
-            DrawText(name2, (int)10, (int)300, 40, BLACK);
+            DrawText(name2.c_str(), (int)10, (int)300, 40, BLACK);
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)textBox2.x + 8 + MeasureText(name2, 40), (int)textBox2.y + 12, 40, BLACK);
+                DrawText("_", (int)textBox2.x + 8 + MeasureText(name2.c_str(), 40), (int)textBox2.y + 12, 40, BLACK);
+            if (check2 == 1)
+            {
+                DrawTexture(checkmark1, 610, 295, WHITE);
+                name2 = "";
+                DrawTexture(star1, 700, 295, WHITE);
+                starcc = 0;
+            }
+            else
+            {
+                DrawTexture(checkmark, 610, 295, WHITE);
+                if (starcc == 1)
+                    DrawTexture(star2, 700, 295, RAYWHITE);
+            }
+            check2 = 0;
             //textbox 4
+            DrawTexture(checkmark, 610, 395, WHITE);
+            DrawTexture(star1, 700, 395, WHITE);
             DrawRectangleRec(textBox3, LIGHTGRAY);
             DrawRectangleLines((int)10, (int)400, (int)600, (int)50, BLACK);
-            DrawText(name3, (int)10, (int)400, 40, BLACK);
+            DrawText(name3.c_str(), (int)10, (int)400, 40, BLACK);
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)textBox3.x + 8 + MeasureText(name3, 40), (int)textBox3.y + 12, 40, BLACK);
+                DrawText("_", (int)textBox3.x + 8 + MeasureText(name3.c_str(), 40), (int)textBox3.y + 12, 40, BLACK);
+            if (check3 == 1)
+            {
+                DrawTexture(checkmark1, 610, 395, WHITE);
+                name3 = "";
+                DrawTexture(star1, 700, 395, WHITE);
+                star3 = 0;
+            }
+            else
+            {
+                DrawTexture(checkmark, 610, 395, WHITE);
+                if (star3 == 1)
+                    DrawTexture(star2, 700, 395, RAYWHITE);
+            }
+            check3 = 0;
             //textbox 5
+            DrawTexture(checkmark, 610, 495, WHITE);
+            DrawTexture(star1, 700, 495, WHITE);
             DrawRectangleRec(textBox4, LIGHTGRAY);
             DrawRectangleLines((int)10, (int)500, (int)600, (int)50, BLACK);
-            DrawText(name4, (int)10, (int)500, 40, BLACK);
+            DrawText(name4.c_str(), (int)10, (int)500, 40, BLACK);
             if (((framesCounter / 20) % 2) == 0)
-                DrawText("_", (int)textBox4.x + 8 + MeasureText(name4, 40), (int)textBox4.y + 12, 40, BLACK);
-
-            
+                DrawText("_", (int)textBox4.x + 8 + MeasureText(name4.c_str(), 40), (int)textBox4.y + 12, 40, BLACK);
+            if (check4 == 1)
+            {
+                DrawTexture(checkmark1, 610, 495, WHITE);
+                name4 = "";
+                DrawTexture(star1, 700, 495, WHITE);
+                star4 = 0;
+            }
+            else
+            {
+                DrawTexture(checkmark, 610, 495, WHITE);
+                if (star4 == 1)
+                    DrawTexture(star2, 700, 495, RAYWHITE);
+            }
+            check4 = 0;
 
             //design
             DrawRectangle(800, -1, 200, 650, PURPLE);
@@ -307,18 +409,16 @@ int main(void)
         {
             //explanation
             DrawRectangle(0, -1, 200, 650, PURPLE);
-            DrawRectangle(25, 50, 150, 150, WHITE); 
+            DrawRectangle(25, 50, 150, 150, WHITE);
             DrawText("INFO", 50, 105, 40, BLACK);
             DrawText("This function shows", 215, 75, 40, BLACK);
             DrawText("the information menu.", 215, 135, 40, BLACK);
-            
-            DrawLine(200, 250, 700, 250, BLACK);
 
-            DrawText("This app is designed ", 215, 300, 40, BLACK);
-            DrawText("to help organize ", 215, 380, 40, BLACK);
-            DrawText("your work. Using c++", 215, 460, 40, BLACK);
-            DrawText("we created TODO.", 215, 540, 40, BLACK);
-            
+            DrawTexture(checkbig, 25, 250, WHITE);
+            DrawTexture(starbig, 25, 450, WHITE);
+            DrawText("Finished task.", 215, 300, 40, BLACK);
+            DrawText("Important task.", 215, 505, 40, BLACK);
+
             DrawLine(700, 0, 700, 650, BLACK);
             DrawText("Creators:", 750, 40, 40, BLACK);
             DrawText("Daniel Uzunov", 710, 120, 40, BLACK);
@@ -329,6 +429,7 @@ int main(void)
         default: break;
         }
         EndDrawing();
+        
     }
     // De-Initialization
     UnloadTexture(button);
@@ -344,4 +445,3 @@ bool IsAnyKeyPressed()
     if ((key >= 32) && (key <= 126)) keyPressed = true;
     return keyPressed;
 }
-
